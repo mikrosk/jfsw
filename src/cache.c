@@ -137,6 +137,11 @@ short Sumo_SCTable[] =
 320,321,322,323 // sumo boss
 };
 
+short Zilla_SCTable[] =
+{
+584,585,586,587,590,591,592,615 // zilla boss
+};
+
 short Bunny_SCTable[] =
 {
 424,425,426,427,428
@@ -248,13 +253,15 @@ SetupPreCache(void)
         PreCacheRange(716,720);
         // bullet splashes
         PreCacheRange(772,776);
+        // boss health and dive meters
+        PreCacheRange(5376,5408);
         }
     }
 
 VOID PreCacheRipper(VOID)
     {
     PreCacheSoundList(Ripper_SCTable, SIZ(Ripper_SCTable));
-    PreCacheRange(1580, 1644);
+    PreCacheRange(1580, 1645);
     }
 
 VOID PreCacheRipper2(VOID)
@@ -288,6 +295,7 @@ VOID PreCacheGuardian(VOID)
     {
     PreCacheSoundList(Guardian_SCTable, SIZ(Guardian_SCTable));
     PreCacheRange(1469,1497);
+    PreCacheRange(1504,1518);
     }
 
 VOID PreCacheNinja(VOID)
@@ -305,13 +313,13 @@ VOID PreCacheNinjaGirl(VOID)
 VOID PreCacheSumo(VOID)
     {
     PreCacheSoundList(Sumo_SCTable, SIZ(Sumo_SCTable));
-    PreCacheRange(4490, 4544);
+    PreCacheRange(1210, 1299);
     }
 
 VOID PreCacheZilla(VOID)
     {
-    PreCacheSoundList(Sumo_SCTable, SIZ(Sumo_SCTable));
-    PreCacheRange(4490, 4544);
+    PreCacheSoundList(Zilla_SCTable, SIZ(Zilla_SCTable));
+    PreCacheRange(5410, 5524);
     }
 
 VOID PreCacheEel(VOID)
@@ -352,7 +360,7 @@ VOID PreCacheSailorGirl(VOID)
 VOID PreCachePruneGirl(VOID)
     {
     PreCacheSoundList(Toilet_SCTable, SIZ(Toilet_SCTable));
-    PreCacheRange(4604,4604);
+    PreCacheRange(4604,4605);
     }
 
 VOID PreCacheTrash(VOID)
@@ -439,11 +447,21 @@ VOID PreCacheAmbient(VOID)
     SPRITEp sp;
     extern AMB_INFO ambarray[];
 
+    if (!gs.Ambient)
+        return;
+
     TRAVERSE_SPRITE_STAT(headspritestat[STAT_AMBIENT], i, nexti)
         {
         sp = &sprite[i];
 
         num = sp->lotag;
+        // RandomizeAmbientSpecials() swaps these for each other
+        if (num >= 56 && num <= 67)
+            {
+            int j;
+            for (j = 56; j <= 67; j++)
+                CacheSound(ambarray[j].diginame, CACHE_SOUND_PRECACHE);
+            }
         num = ambarray[num].diginame;
 
         CacheSound(num, CACHE_SOUND_PRECACHE);
@@ -529,11 +547,11 @@ PreCacheActor(VOID)
                 break;
 
             case SUMO_RUN_R0:
-                PreCacheZilla();
+                PreCacheSumo();
                 break;
 
             case ZILLA_RUN_R0:
-                PreCacheSumo();
+                PreCacheZilla();
                 break;
 
             case TOILETGIRL_R0:
@@ -637,6 +655,11 @@ void DoTheCache(void)
                 getpackets();
                 }
             }
+        else if (TEST(gotpic[i>>3], 1<<(i&7)))
+            {
+            // already cached, give it the priority of a freshly loaded tile
+            walock[i] = CACHE_UNLOCK_MAX;
+            }
         }
 
     memset(gotpic,0,sizeof(gotpic));
@@ -719,6 +742,14 @@ precache(void)
             j = sp->picnum;
 
             SET(gotpic[j>>3], 1<<(j&7));
+
+            if (TEST(picanm[j],TILE_ANIM_TYPE))
+                {
+                for (i = 1; i <= TEST(picanm[j],TILE_ANIM_NUM); i++)
+                    {
+                    SET(gotpic[(j+i)>>3], 1<<((j+i)&7));
+                    }
+                }
             }
         }
     }
