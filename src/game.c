@@ -3385,6 +3385,13 @@ int app_main(int argc, char const * const argv[])
     (void)configloaded;
 #endif
 
+#if defined(__MINT__)
+    // TOS can neither locate the executable nor provide a per-user profile
+    // directory, so game data is taken from "data" and then the current
+    // directory, and user files are written to the current directory.
+    addsearchpath(".");
+    addsearchpath("data");
+#else
 #if defined(DATADIR)
     {
         const char *datadir = DATADIR;
@@ -3448,6 +3455,7 @@ int app_main(int argc, char const * const argv[])
             free(supportdir);
         }
     }
+#endif
 
     buildsetlogfile("sw.log");
 

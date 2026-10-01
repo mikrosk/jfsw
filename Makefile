@@ -187,6 +187,9 @@ endif
 ifeq ($(PLATFORM),DARWIN)
 	OURLDFLAGS+= -framework Foundation
 endif
+ifeq ($(PLATFORM),MINT)
+	EXESUFFIX=.gtp
+endif
 
 ifeq ($(RENDERTYPE),SDL)
 	OURCFLAGS+= $(SDLCONFIG_CFLAGS)
@@ -259,8 +262,8 @@ $(RSRC)/%_gresource.c: $(RSRC)/%.gresource.xml
 $(RSRC)/%_gresource.h: $(RSRC)/%.gresource.xml
 	glib-compile-resources --generate-header --manual-register --c-name=startgtk --target=$@ --sourcedir=$(RSRC) $<
 
-$(RSRC)/%_bmp.c: $(RSRC)/%.bmp | $(ENGINEROOT)/bin2c$(EXESUFFIX)
-	$(ENGINEROOT)/bin2c$(EXESUFFIX) $< appicon_bmp > $@
+$(RSRC)/%_bmp.c: $(RSRC)/%.bmp | $(ENGINEROOT)/bin2c$(HOSTEXESUFFIX)
+	$(ENGINEROOT)/bin2c$(HOSTEXESUFFIX) $< appicon_bmp > $@
 $(RSRC)/%.bmp: $(RSRC)/%.png
 	$(shell which magick convert true | head -1) $< $@
 

@@ -3,6 +3,7 @@
 *.a
 *.res
 *.exe
+*.gtp
 *.map
 *.log
 *.grp

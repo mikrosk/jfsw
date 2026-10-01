@@ -1,0 +1,26 @@
+RELEASE=1
+USE_POLYMOST=0
+USE_OPENGL=0
+WITHOUT_GTK=1
+#USE_ASM=1
+
+# -m68020-60 or -mcpu=5475
+CPU ?= -m68020-60
+
+CC = m68k-atari-mintelf-gcc
+CXX = m68k-atari-mintelf-g++
+AR = m68k-atari-mintelf-ar
+RANLIB = m68k-atari-mintelf-ranlib
+HOSTCXX = g++
+HOSTCXXFLAGS = -O2
+PKGCONFIG = CFLAGS=$(CPU) m68k-atari-mintelf-pkg-config
+LDFLAGS = $(CPU) -Wl,--msuper-memory -Wl,--stack,256k
+
+ifneq ($(RELEASE),0)
+LDFLAGS += -s
+CFLAGS = -fomit-frame-pointer -O2 -DNDEBUG $(CPU)
+CXXFLAGS = -fomit-frame-pointer -O2 -DNDEBUG $(CPU)
+else
+CFLAGS = -Og $(CPU)
+CXXFLAGS = -Og $(CPU)
+endif
