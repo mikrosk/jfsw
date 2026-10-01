@@ -14,6 +14,8 @@ RANLIB = m68k-atari-mintelf-ranlib
 HOSTCXX = g++
 HOSTCXXFLAGS = -O2
 PKGCONFIG = CFLAGS=$(CPU) m68k-atari-mintelf-pkg-config
+RENDERTYPE = SDL1
+SDLCONFIG = $(PKGCONFIG) sdl
 LDFLAGS = $(CPU) -Wl,--msuper-memory -Wl,--stack,256k
 
 ifneq ($(RELEASE),0)
