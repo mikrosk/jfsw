@@ -5,7 +5,7 @@
 -include Makefile.user
 
 # Makefile.user settings are not visible to the engine and audio library makes otherwise
-SUBMAKEVARS:=$(foreach v,CC CXX AR RANLIB HOSTCXX HOSTCXXFLAGS CFLAGS CXXFLAGS CPPFLAGS LDFLAGS SDL2CONFIG PKGCONFIG WITHOUT_GTK,\
+SUBMAKEVARS:=$(foreach v,CC CXX AR RANLIB HOSTCXX HOSTCXXFLAGS CFLAGS CXXFLAGS CPPFLAGS LDFLAGS RENDERTYPE SDL2CONFIG SDLCONFIG PKGCONFIG WITHOUT_GTK,\
 	$(if $(filter file,$(origin $(v))),$(v)='$($(v))'))
 
 ##
@@ -203,6 +203,13 @@ ifeq ($(RENDERTYPE),SDL)
 			$(RSRC)/startgtk_game_gresource.$o
 		EDITOROBJS+= $(RSRC)/startgtk_build_gresource.$o
 	endif
+
+	GAMEOBJS+= $(RSRC)/game_bmp.$o
+	EDITOROBJS+= $(RSRC)/build_bmp.$o
+endif
+ifeq ($(RENDERTYPE),SDL1)
+	OURCFLAGS+= $(SDLCONFIG_CFLAGS)
+	OURLDFLAGS+= $(SDLCONFIG_LIBS)
 
 	GAMEOBJS+= $(RSRC)/game_bmp.$o
 	EDITOROBJS+= $(RSRC)/build_bmp.$o
