@@ -617,6 +617,25 @@ SongIsPlaying(void)
     return FALSE;
 }
 
+void
+UpdateSong(void)
+{
+    static int lastclock = 0;
+
+    if (SongType != SongTypeCDA)
+        return;
+
+    // totalclock runs at 120 Hz and can be set back, poll every 2 seconds
+    if (totalclock >= lastclock && totalclock - lastclock < 2*120)
+        return;
+
+    lastclock = totalclock;
+
+    // CD drivers without a playback thread restart a looped track
+    // when polled
+    CD_IsPlaying();
+}
+
 VOID
 StopSound(VOID)
     {
