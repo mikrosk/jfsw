@@ -2179,6 +2179,7 @@ MenuLevel(VOID)
         {
         handleevents();
         OSD_DispatchQueued();
+        UpdateSong();
 
         if (quitevent)
             {
@@ -2942,6 +2943,8 @@ dsprintf_null(char *str, char *format, ...)
 void MoveLoop(void)
     {
     int pnum;
+
+    UpdateSong();
 
     getpackets();
 
