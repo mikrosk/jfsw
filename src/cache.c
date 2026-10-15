@@ -135,18 +135,19 @@ short Serpent_SCTable[] =
 short Sumo_SCTable[] =
 {
 320,321,322,323, // sumo boss
-394,581
+394,581,
+130 // summoning skulls
 };
 
 short Zilla_SCTable[] =
 {
-584,585,586,587,590,591,592,615 // zilla boss
+584,590,591,592,615 // zilla boss
 };
 
 short Bunny_SCTable[] =
 {
 424,425,426,427,428,
-452,453,454,455,456,457,458
+452,453,454,456,457
 };
 
 short NinjaGirl_SCTable[] =
@@ -172,6 +173,7 @@ short Pachinko_SCTable[] =
 void PreCacheSoundList(short table[], int num);
 void PreCacheTable(short table[], int num);
 VOID PreCacheGhost(VOID);
+VOID PreCacheSkull(VOID);
 
 void
 SetupPreCache(void)
@@ -321,12 +323,22 @@ VOID PreCacheSumo(VOID)
     {
     PreCacheSoundList(Sumo_SCTable, SIZ(Sumo_SCTable));
     PreCacheRange(1210, 1299);
+    PreCacheSkull();
     }
 
 VOID PreCacheZilla(VOID)
     {
     PreCacheSoundList(Zilla_SCTable, SIZ(Zilla_SCTable));
-    PreCacheRange(5410, 5524);
+    // run, rocket and rail
+    PreCacheRange(5410, 5469);
+    // only the first frame of each shoot rotation is used
+    PreCacheRange(5490, 5490);
+    PreCacheRange(5494, 5494);
+    PreCacheRange(5498, 5498);
+    PreCacheRange(5502, 5502);
+    PreCacheRange(5506, 5506);
+    // die, dead and pain
+    PreCacheRange(5510, 5524);
     }
 
 VOID PreCacheEel(VOID)
@@ -466,7 +478,7 @@ VOID PreCacheAmbient(VOID)
         if (num >= 56 && num <= 67)
             {
             int j;
-            for (j = 56; j <= 67; j++)
+            for (j = 56; j <= 66; j++)
                 CacheSound(ambarray[j].diginame, CACHE_SOUND_PRECACHE);
             }
         num = ambarray[num].diginame;
