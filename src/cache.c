@@ -134,7 +134,8 @@ short Serpent_SCTable[] =
 
 short Sumo_SCTable[] =
 {
-320,321,322,323 // sumo boss
+320,321,322,323, // sumo boss
+394,581
 };
 
 short Zilla_SCTable[] =
@@ -144,7 +145,13 @@ short Zilla_SCTable[] =
 
 short Bunny_SCTable[] =
 {
-424,425,426,427,428
+424,425,426,427,428,
+452,453,454,455,456,457,458
+};
+
+short NinjaGirl_SCTable[] =
+{
+575,576,577
 };
 
 short Toilet_SCTable[] =
@@ -306,7 +313,7 @@ VOID PreCacheNinja(VOID)
 
 VOID PreCacheNinjaGirl(VOID)
     {
-    //PreCacheSoundList(NinjaGirl_SCTable, SIZ(NinjaGirl_SCTable));
+    PreCacheSoundList(NinjaGirl_SCTable, SIZ(NinjaGirl_SCTable));
     PreCacheRange(5162, 5260);
     }
 
@@ -324,7 +331,7 @@ VOID PreCacheZilla(VOID)
 
 VOID PreCacheEel(VOID)
     {
-    PreCacheRange(4430, 4479);
+    // its art is always precached in SetupPreCache()
     }
 
 VOID PreCacheToiletGirl(VOID)
@@ -501,8 +508,6 @@ VOID PreCacheSoundSpot(VOID)
         num = SP_TAG6(sp);
         if (num > 0 && num < DIGI_MAX)
             CacheSound(num, CACHE_SOUND_PRECACHE);
-
-        CacheSound(num, CACHE_SOUND_PRECACHE);
         }
     }
 
