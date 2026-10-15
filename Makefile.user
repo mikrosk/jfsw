@@ -5,7 +5,7 @@ WITHOUT_GTK=1
 #USE_ASM=1
 
 # -m68020-60 or -mcpu=5475
-CPU ?= -m68020-60 -mtune=68060
+CPU ?= -m68020-60 -mtune=68060 -mfastcall
 
 CC = m68k-atari-mintelf-gcc
 CXX = m68k-atari-mintelf-g++
